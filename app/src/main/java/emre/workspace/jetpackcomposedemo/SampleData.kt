@@ -1,5 +1,7 @@
 package emre.workspace.jetpackcomposedemo
 
+import emre.workspace.jetpackcomposedemo.data.model.Message
+
 object SampleData {
     // Sample conversation data
     val conversationSample = listOf(
