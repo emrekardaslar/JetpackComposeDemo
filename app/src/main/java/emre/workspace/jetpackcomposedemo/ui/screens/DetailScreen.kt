@@ -1,7 +1,7 @@
 package emre.workspace.jetpackcomposedemo.ui.screens
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -15,7 +15,7 @@ import emre.workspace.jetpackcomposedemo.data.model.Message
 import emre.workspace.jetpackcomposedemo.ui.components.ProfilePicture
 
 @Composable
-fun DetailScreen(message: Message) {
+fun DetailScreen(message: Message) { // Ensure this parameter exists
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

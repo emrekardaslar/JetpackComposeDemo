@@ -8,18 +8,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private val repository: MessageRepository) : ViewModel() {
+class HomeViewModel : ViewModel() {
+    private val repository = MessageRepository() // Initialize directly for simplicity
 
     private val _messages = MutableStateFlow<List<Message>>(emptyList())
-    val messages: StateFlow<List<Message>> get() = _messages
+    val messages: StateFlow<List<Message>> = _messages
 
     init {
-        loadMessages()
+        fetchMessages()
     }
 
-    private fun loadMessages() {
+    private fun fetchMessages() {
         viewModelScope.launch {
-            _messages.value = repository.getMessages()
+            val fetchedMessages = repository.getMessages()
+            _messages.value = fetchedMessages
         }
     }
 }

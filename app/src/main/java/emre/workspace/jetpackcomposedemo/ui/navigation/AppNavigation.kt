@@ -1,38 +1,49 @@
 package emre.workspace.jetpackcomposedemo.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import emre.workspace.jetpackcomposedemo.data.model.Message
+import androidx.navigation.compose.rememberNavController
 import emre.workspace.jetpackcomposedemo.ui.screens.DetailScreen
 import emre.workspace.jetpackcomposedemo.ui.screens.HomeScreen
-import com.google.gson.Gson
-
-// Navigation route names
-sealed class Screen(val route: String) {
-    object Home : Screen("home")
-    object Detail : Screen("detail/{message}") {
-        fun createRoute(messageJson: String) = "detail/$messageJson"
-    }
-}
+import emre.workspace.jetpackcomposedemo.viewmodel.DetailViewModel
+import emre.workspace.jetpackcomposedemo.viewmodel.HomeViewModel
 
 @Composable
-fun AppNavigation(navController: NavHostController, messages: List<Message>) {
-    NavHost(navController = navController, startDestination = Screen.Home.route) {
-        // Home screen
-        composable(route = Screen.Home.route) {
-            HomeScreen(messages = messages) { message ->
-               val messageJson = Gson().toJson(message) // Convert message to JSON string
-               navController.navigate(Screen.Detail.createRoute(messageJson))
+fun AppNavigation(
+    navController: NavHostController = rememberNavController(),
+    homeViewModel: HomeViewModel = viewModel(),
+    detailViewModel: DetailViewModel = viewModel()
+) {
+    // Collect the StateFlow as State for composable usage
+    val messages = homeViewModel.messages.collectAsState(initial = emptyList()).value
+
+    NavHost(
+        navController = navController,
+        startDestination = "home"
+    ) {
+        composable("home") {
+            HomeScreen(
+                messages = messages, // Pass the collected messages
+                onMessageClick = { message ->
+                    detailViewModel.setSelectedMessage(message)
+                    navController.navigate("detail")
+                }
+            )
+        }
+        composable("detail") {
+            val selectedMessage by detailViewModel.selectedMessage.collectAsState()
+
+            selectedMessage?.let { message ->
+                DetailScreen(message = message) // Pass the non-nullable message
+            } ?: run {
+                // Handle the case where selectedMessage is null (optional)
             }
         }
 
-        // Detail screen
-        composable(route = Screen.Detail.route) { backStackEntry ->
-            val messageJson = backStackEntry.arguments?.getString("message")
-            val message = Gson().fromJson(messageJson, Message::class.java) // Convert JSON string back to Message
-            message?.let { DetailScreen(message = it) }
-        }
     }
 }
