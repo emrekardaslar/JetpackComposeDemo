@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -40,7 +41,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -51,6 +51,19 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.gson)
+
+    // 🔹 Firebase BoM (Bill of Materials) - Keeps all Firebase dependencies updated
+    implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
+
+    // 🔹 Firebase Remote Config
+    implementation("com.google.firebase:firebase-config-ktx")
+
+    // 🔹 Firebase Analytics (optional, but good for logging Remote Config events)
+    implementation("com.google.firebase:firebase-analytics-ktx")
+
+    // 🔹 Firebase Common (Ensures proper Firebase initialization)
+    implementation("com.google.firebase:firebase-common-ktx")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

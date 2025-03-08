@@ -21,7 +21,7 @@ fun AppNavigation(
 ) {
     // Collect the StateFlow as State for composable usage
     val messages = homeViewModel.messages.collectAsState(initial = emptyList()).value
-
+    val backgroundColor = homeViewModel.backgroundColor.value;
     NavHost(
         navController = navController,
         startDestination = "home"
@@ -32,7 +32,8 @@ fun AppNavigation(
                 onMessageClick = { message ->
                     detailViewModel.setSelectedMessage(message)
                     navController.navigate("detail")
-                }
+                },
+                backgroundColor = backgroundColor
             )
         }
         composable("detail") {
