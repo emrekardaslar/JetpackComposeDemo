@@ -20,12 +20,11 @@ fun HomeScreen(
             modifier = Modifier.fillMaxSize(),
             color = Color(android.graphics.Color.parseColor(backgroundColor))
         ) {
-
+            Conversation(
+                messages = messages,
+                onMessageClick = onMessageClick,
+                modifier = Modifier.padding(padding)
+            )
         }
-        Conversation(
-            messages = messages,
-            onMessageClick = onMessageClick,
-            modifier = Modifier.padding(padding)
-        )
     }
 }
