@@ -61,6 +61,45 @@ To run the app in Android Studio:
 - Jetpack Compose
 - Navigation Component
 - ViewModel & StateFlow
+- Remote Config
+
+
+## Installation
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/emrekardaslar/JetpackComposeDemo.git
+   ```
+2. Open the project in **Android Studio**.
+3. Sync Gradle and build the project.
+
+## Remote Config
+Remote Config allows you to remotely configure certain aspects of your app without requiring an update.
+
+### Downloading `google-services.json`
+To use Remote Config, you need to download the `google-services.json` file:
+1. Go to [Firebase Console](https://console.firebase.google.com/).
+2. Select your project.
+3. Navigate to **Project Settings** > **General**.
+4. Scroll down to **Your apps** and select the correct app.
+5. Click **Download google-services.json**.
+6. Place the downloaded file inside `app/` directory of your project.
+
+### Using Remote Config
+1. Add Firebase dependencies in `build.gradle.kts`:
+   ```kotlin
+   dependencies {
+       implementation("com.google.firebase:firebase-config-ktx:21.3.0")
+   }
+   ```
+2. Initialize Remote Config in your ViewModel or Application class:
+   ```kotlin
+   val remoteConfig = Firebase.remoteConfig
+   remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
+       if (task.isSuccessful) {
+           val myValue = remoteConfig.getString("your_config_key")
+       }
+   }
+   ```
 
 ## Git Ignore Configuration
 Add the following to `.gitignore` to keep sensitive files out of version control:
